@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANGEL Bingo Caller</title>
+  <style>
+    body {font-family: Arial, sans-serif;text-align: center;background: linear-gradient(to bottom, #ffd6e8, #d6eaff);color: #333;padding: 20px;}
+    h1 {font-size: 2em;color: #ff69b4;}
+    #currentLetter {display:inline-block;font-size:3em;font-weight:bold;background:#ff69b4;color:white;padding:10px 20px;border-radius:10px;margin-bottom:15px;}
+    #currentWord {font-size: 2em;font-weight: bold;margin: 20px 0;color: #0066cc;}
+    button {padding: 15px 30px;font-size: 1.2em;border: none;border-radius: 8px;background-color: #ff69b4;color: white;margin: 10px;cursor: pointer;}
+    button:hover {background-color: #ff85c1;}
+    #history {margin-top: 30px;text-align: left;max-width: 400px;margin-left: auto;margin-right: auto;background: white;padding: 15px;border-radius: 8px;box-shadow: 0 0 10px rgba(0,0,0,0.1);}
+    #history h2 {color: #0066cc;}
+    .wordItem {font-size: 1.1em;margin: 5px 0;}
+  </style>
+</head>
+<body>
+  <h1>ANGEL Bingo Caller</h1>
+  <div id="currentLetter"></div>
+  <div id="currentWord">Press "Next Word" to Start</div>
+  <button onclick="nextWord()">Next Word</button>
+  <button onclick="resetGame()" style="background-color:#00bfff;">Reset</button>
+  <div id="history"><h2>Called Words</h2><div id="historyList"></div></div>
+  <script>
+    const groups = {
+      'A': ["Baby","Bundle","Little One","Tiny Toes","Newborn","Bundle of Joy","Sweet Pea","Snuggles","Giggles","Cutie Pie","Darling","Miracle","Adorable","Angel","Precious","Happiness","Sunshine","Future","Love Bug","Peanut","Pumpkin","Snugglebug","Buttercup","Sprout","Bambino","Chubby Cheeks","Giggle Monster","Dreamer","Little Star","Little Miracle","Sweetheart","Beloved","Button Nose","Kiddos","Jellybean","Love Nugget","Cutie","Cuddles","Sweetkins","Babe"],
+      'N': ["Love","Heart","Joy","Affection","Cherish","Darling","Sweetness","Beloved","Adore","Affectionate","Devotion","Forever","Kisses","Hugs","Laughter","Blessing","Together","Family","Friendship","Union","Support","Care","Admire","Compassion","Warmth","Harmony","Treasure","Fondness","Admiration","Hope","Comfort","Gratitude","Peace","Closeness","Trust","Kindness","Bliss","Grateful","Affectionate","Overjoyed"],
+      'G': ["Gender","Reveal","Boy","Girl","Surprise","Guessing","Excitement","Team Blue","Team Pink","Prediction","Speculation","Curiosity","Anticipation","Wonder","Glowing","Pregnant","Mom-to-Be","Dad-to-Be","Ultrasound","Heartbeat","Kick","Due Date","Celebrating","Expecting","Revealed","Overjoyed","Joyful","Announcement","Big News","Mystery","Tiny Secret","Upcoming","Baby Bump","Inside Scoop","New Life","Blessed","Excited","Over the Moon","Counting Down","Special Day"],
+      'E': ["Reveal","Party","Celebration","Cake","Cupcakes","Confetti","Sprinkles","Streamers","Balloons","Decorations","Ribbons","Countdown","Big Day","Gathering","Surprise Inside","Balloon Pop","Confetti Cannon","Cake Cutting","Gift Opening","Cheers","Games","Photo Booth","Announcements","Decor","Backdrop","Rejoice","Excited Faces","Little Party","Hooray","Togetherness","Special Moment","Party Hats","Cake Stand","Pinata","Joyful Gathering","Family Time","Unwrapping","Big Celebration","Decor Galore","Festivities"],
+      'L': ["Party","Parents","Mommy","Daddy","Grandma","Grandpa","Aunt","Uncle","Cousins","Siblings","Friends","Guests","Loved Ones","Family Tree","Playmates","Relatives","Well-wishers","Invitees","Support System","Circle","Community","Neighbors","Hosts","Besties","Squad","Crew","Cheerleaders","Godparents","Playgroup","Close Ones","Companions","Lifelong Friends","Colleagues","Acquaintances","Well-meaning","Celebrators","Comrades","Gathered","Crowd","Well-loved"]
+    };
+    let allWords = []; for (const [letter, words] of Object.entries(groups)) {words.forEach(word => allWords.push({letter, word}));}
+    let remainingWords = [...allWords]; let history = [];
+    function nextWord() {
+      if (remainingWords.length === 0) {document.getElementById('currentWord').innerText = "All words called!";document.getElementById('currentLetter').innerText="";return;}
+      const idx = Math.floor(Math.random() * remainingWords.length);
+      const {letter, word} = remainingWords.splice(idx, 1)[0];
+      document.getElementById('currentLetter').innerText = letter;
+      document.getElementById('currentWord').innerText = word;
+      const display = `${letter} - ${word}`;
+      history.unshift(display);
+      updateHistory();
+    }
+    function updateHistory() {document.getElementById('historyList').innerHTML = history.map(item => `<div class='wordItem'>${item}</div>`).join('');}
+    function resetGame() {remainingWords = [...allWords];history = [];document.getElementById('currentLetter').innerText="";document.getElementById('currentWord').innerText = "Press \"Next Word\" to Start";updateHistory();}
+  </script>
+</body>
+</html>
